@@ -36,7 +36,8 @@ export default function Home() {
         <p>
           <span className="text-indigo-500 text-2xl">5thumma หาธรรมมะ</span>{" "}
           คือเว็บไซต์ที่จะเสนอ
-          <span className="text-lime-500"> "เควสต์หาทำ" </span>ให้กับคุณ <br />
+          <span className="text-lime-500"> &quot;เควสต์หาทำ&quot; </span>
+          ให้กับคุณ <br />
           เพียงรับเควสต์จากเรา แล้วชีวิตของคุณจะไม่น่าเบื่ออีกต่อไป
         </p>
 
