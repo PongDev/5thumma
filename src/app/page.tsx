@@ -6,7 +6,7 @@ import happyPic from "../assets/0_happy.png";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col justify-center p-24">
+    <main className="flex min-h-screen flex-col justify-center">
       <div className="flex flex-col items-center text-center space-y-9">
         <h1 className="font-bold text-3xl text-indigo-500">
           คุณเคยประสบปัญหา เบื่อโลก หรือไม่?
@@ -15,28 +15,22 @@ export default function Home() {
         <div className="flex">
           <div>
             <p className="mb-1">Before:</p>
-            <Image
-              src={boredPic}
-              width={200}
-              height={200}
-              alt="Picture of boredom"
-            />
+            <Image src={boredPic} height={300} alt="Picture of boredom" />
           </div>
           <div>
             <p className="mb-1">After:</p>
             <Image
               src={happyPic}
-              width={112}
-              height={200}
+              height={300}
               alt="Picture of happiness after doing 5thumma quests"
             />
           </div>
         </div>
 
         <p>
-          <span className="text-indigo-500 text-2xl">5thumma หาธรรมมะ</span>{" "}
+          <span className="text-indigo-500 text-3xl">5thumma หาธรรมมะ</span>{" "}
           คือเว็บไซต์ที่จะเสนอ
-          <span className="text-lime-500"> &quot;เควสต์หาทำ&quot; </span>
+          <span className="text-indigo-500"> &quot;เควสต์หาทำ&quot; </span>
           ให้กับคุณ <br />
           เพียงรับเควสต์จากเรา แล้วชีวิตของคุณจะไม่น่าเบื่ออีกต่อไป
         </p>
