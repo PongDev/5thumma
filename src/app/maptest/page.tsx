@@ -1,22 +1,4 @@
 "use client";
-// import { APIProvider, Map } from "@vis.gl/react-google-maps";
-
-// export default function MapTest() {
-//   return (
-//     <APIProvider apiKey={"AIzaSyAkWBk4IGhPB3YTZh1W6IPO9iNcb-hJXDs"}>
-//       <div>
-//         <Map
-//           style={{ width: "100vw", height: "100vh" }}
-//           defaultCenter={{ lat: 13.736511897128125, lng: 100.5340408779572 }}
-//           defaultZoom={20}
-//           gestureHandling={"greedy"}
-//           disableDefaultUI={true}
-//         />
-//       </div>
-//     </APIProvider>
-//   );
-// }
-
 
 import React, { useEffect, useRef } from 'react';
 import { useJsApiLoader } from '@react-google-maps/api';
