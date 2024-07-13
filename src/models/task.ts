@@ -1,4 +1,4 @@
-export const TaskTypeMapping = {
+export const TaskTypeMapping: {[key in TaskType]: string} = {
   eat: "สายกิน",
   relationship: "สายสัมพันธ์",
   religion: "สายวัด",
