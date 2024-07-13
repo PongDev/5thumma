@@ -1,11 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    appDir: true,
-    fontLoaders: [
-      { loader: "@next/font/google", options: { subsets: ["thai"] } },
-    ],
-  },
-};
+const nextConfig = {};
 
 export default nextConfig;
