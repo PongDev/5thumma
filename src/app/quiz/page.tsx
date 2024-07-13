@@ -1,9 +1,15 @@
 import { Button } from "@/components/ui/button";
+import { ChevronLeftIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
 import React from "react";
 
 const Quiz = () => {
   return (
     <main className="min-h-screen text-center p-24">
+      <Button variant="outline" className="absolute top-4 left-4">
+        <ChevronLeftIcon />
+        <Link href="/">พ้มไม่เบื่อโลกแล้วว่ะ</Link>
+      </Button>
       <h1 className="font-medium text-xl mb-10">
         ไหนดูสิ้ว่าคุณเหมาะกับการหาทำแบบไหน
       </h1>
