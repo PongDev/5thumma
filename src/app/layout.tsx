@@ -5,7 +5,7 @@ import "./globals.css";
 const kanit = Kanit({ weight: ["400", "500", "700"], subsets: ["thai"] });
 
 export const metadata: Metadata = {
-  title: "หาธรรมะ",
+  title: "หาธรรมะ | 5thumma",
   description: "เบื่อบ้านเบื่อเมืองแบบนี้ มาหาอะไรทำมะ",
 };
 
