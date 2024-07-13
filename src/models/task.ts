@@ -4,7 +4,7 @@ export const TaskTypeMapping = {
   religion: "สายวัด",
   outstanding: "สายเกินแก้",
   environment: "สายรักโลก",
-  theif: "สายลักโลก",
+  thief: "สายลักโลก",
 };
 
 export type TaskType =
@@ -13,7 +13,7 @@ export type TaskType =
   | "religion"
   | "outstanding"
   | "environment"
-  | "theif";
+  | "thief";
 
 export type Task = {
   name: string;
