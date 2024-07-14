@@ -87,27 +87,27 @@ export const TaskFiveStar: TaskPreset = {
 export const TaskMoveIt: TaskPreset = {
     name: "Move it",
     desc: "ทำให้ของที่อยู่ปกติไม่ปกติ เช่น เอารังนกมาไว้ที่พื้น",
-    type: "theif",
+    type: "thief",
 }
 export const TaskMyStoneFriend: TaskPreset = {
     name: "ก้อนหินเพื่อนลัก",
     desc: "เก็บก้อนหินใกล้ตัวคุณมา และทำมันเป็นสัตว์เลี้ยง",
-    type: "theif",
+    type: "thief",
 }
 export const Task5Thb: TaskPreset = {
     name: "5 บาท",
     desc: "เก็บขยะหรือของที่คนทิ้งแล้ว เอาไปขายให้ได้เงินอย่างน้อย 5 บาท",
-    type: "theif",
+    type: "thief",
 }
 export const TaskDigItUp: TaskPreset = {
     name: "Dig it up",
     desc: "ในน้ำมีปลา ในนามีข้าว ไปขุดดินและเก็บของที่เจอกลับบ้าน ไม่ว่าจะเป็นทองหรือไส้เดือน",
-    type: "theif",
+    type: "thief",
 }
 export const TaskFreeStaff: TaskPreset = {
     name: "ของฟรีมีในโลก",
     desc: "ทุกคนต้องเคยทิ้งปากกาหรือดินสอไว้ หาให้เจอและเขียนจดหมายว่าคุณพบสิ่งนี้ที่ไหน ถ้าเขียนไม่ได้ ก็กดให้เห็นรอย",
-    type: "theif",
+    type: "thief",
 }
 
 // สายวัด
