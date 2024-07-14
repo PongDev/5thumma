@@ -52,14 +52,29 @@ const getTaskTypeStyle = (type: TaskType): CSSProperties => {
 export interface QuestBoxPreviewProps {
   name: string;
   type: TaskType;
+  lat: number;
+  lng: number
 }
 
-const QuestBoxPreview: FC<QuestBoxPreviewProps> = ({ name, type }) => {
+const getStreetViewUrl = (lat: number, lng: number): string => {
+  const baseUrl = 'https://maps.googleapis.com/maps/api/streetview';
+  const parameters = new URLSearchParams({
+    size: "640x400",
+    location: `${lat},${lng}`,
+    heading: "100",
+    pitch: "10",
+    key: "AIzaSyAkWBk4IGhPB3YTZh1W6IPO9iNcb-hJXDs",
+  });
+
+  return `${baseUrl}?${parameters.toString()}`;
+}
+
+const QuestBoxPreview: FC<QuestBoxPreviewProps> = ({ name, type, lat, lng }) => {
   return (
     <div className="border border-slate-300 rounded-lg p-2">
       <img
         className="rounded-t-md"
-        src="https://as2.ftcdn.net/v2/jpg/02/64/15/41/1000_F_264154131_XvpBI5fARjB7Qlo4PMrMMTaunXha47NR.jpg"
+        src={getStreetViewUrl(lat, lng)}
         alt="quest image"
       />
       <p className="px-2 py-2 text-sm">{name}</p>
@@ -233,16 +248,14 @@ const QuestPage = () => {
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            {currentQuestsList.map((quest, id) => (
-              <Button
-                onClick={() => {
-                  setClickedQuest(quest);
-                  setIsDialogOpen(true);
-                }}
-              >
-                <QuestBoxPreview key={id} name={quest.name} type={quest.type} />
-              </Button>
-            ))}
+            {currentQuestsList.map((quest, id) => <QuestBoxPreview
+                key={id}
+                name={quest.name}
+                type={quest.type}
+                lat={chulaEngineerLatLong.lat}
+                lng={chulaEngineerLatLong.lng}
+              />
+            )}
           </div>
         </div>
         <div className="flex flex-col items-center mx-auto">
@@ -254,7 +267,6 @@ const QuestPage = () => {
               type: "relationship",
               locationImageURL: "",
               locationURL: "",
-              status: "",
             }}
           />
 
