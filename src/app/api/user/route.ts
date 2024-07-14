@@ -23,6 +23,7 @@ export async function GET(request: Request) {
 
     const res: GetUserResponseDTO = {
       tasks: userData?.tasks ?? [],
+      allowTaskTypes: userData?.allowTaskTypes ?? [],
     };
     return Response.json(res);
   } catch (error) {

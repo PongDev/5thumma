@@ -1,5 +1,4 @@
-import { Task } from "@/models/task";
-import { usersCollection } from "./firestore";
+import { Task, TaskStatus, TaskType } from "@/models/task";
 import { getUserData, validateUserToken } from "./user";
 
 export const createTask = async (token: string, task: Task) => {
@@ -8,7 +7,16 @@ export const createTask = async (token: string, task: Task) => {
   const [userRef, userData] = await getUserData(token);
   const userTasks = userData?.tasks ?? [];
 
-  await userRef.update({ tasks: [...userTasks, task] });
+  task = {
+    ...task,
+    status: "in progress",
+    createdAt: new Date().getTime(),
+    updatedAt: new Date().getTime(),
+  };
+  await userRef.update({
+    tasks: [...userTasks, task],
+    updatedAt: new Date().getTime(),
+  });
 };
 
 export const getTasks = async (token: string): Promise<Task[]> => {
@@ -21,8 +29,9 @@ export const getTasks = async (token: string): Promise<Task[]> => {
 export const updateTasksStatus = async (
   token: string,
   taskName: string,
+  taskType: TaskType,
   taskLocationURL: string,
-  status: string,
+  status: TaskStatus,
 ) => {
   validateUserToken(token);
 
@@ -30,11 +39,18 @@ export const updateTasksStatus = async (
   const userTasks = userData?.tasks ?? [];
 
   const updatedTasks = userTasks.map((task: Task) => {
-    if (task.name === taskName && task.locationURL === taskLocationURL) {
-      return { ...task, status };
+    if (
+      task.name === taskName &&
+      task.type === taskType &&
+      task.locationURL === taskLocationURL
+    ) {
+      return { ...task, status, updatedAt: new Date().getTime() };
     }
     return task;
   });
 
-  await userRef.update({ tasks: updatedTasks });
+  await userRef.update({
+    tasks: updatedTasks,
+    updatedAt: new Date().getTime(),
+  });
 };

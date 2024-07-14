@@ -10,4 +10,5 @@ export type CreateUserResponseDTO = {
 
 export type GetUserResponseDTO = {
   tasks: Task[];
+  allowTaskTypes: TaskType[];
 };

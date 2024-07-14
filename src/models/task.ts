@@ -15,6 +15,8 @@ export type TaskType =
   | "environment"
   | "thief";
 
+export type TaskStatus = "in progress" | "complete";
+
 export type TaskPreset = {
   name: string;
   desc: string;
@@ -24,5 +26,7 @@ export type TaskPreset = {
 export type Task = TaskPreset & {
   locationURL: string;
   locationImageURL: string;
-  status: string;
+  status?: TaskStatus;
+  createdAt?: number;
+  updatedAt?: number;
 };
