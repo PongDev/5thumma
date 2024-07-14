@@ -22,7 +22,7 @@ export const updateTasksStatus = async (
   token: string,
   taskName: string,
   taskLocationURL: string,
-  status: string
+  status: string,
 ) => {
   validateUserToken(token);
 

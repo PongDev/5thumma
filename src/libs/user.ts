@@ -25,14 +25,14 @@ export const generateUserToken = (): string => {
 };
 
 export const getUserData = async (
-  token: string
+  token: string,
 ): Promise<
   [
     FirebaseFirestore.DocumentReference<
       FirebaseFirestore.DocumentData,
       FirebaseFirestore.DocumentData
     >,
-    User | undefined
+    User | undefined,
   ]
 > => {
   const userRef = usersCollection.doc(token);

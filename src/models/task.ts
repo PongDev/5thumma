@@ -1,4 +1,4 @@
-export const TaskTypeMapping: {[key in TaskType]: string} = {
+export const TaskTypeMapping: { [key in TaskType]: string } = {
   eat: "สายกิน",
   relationship: "สายสัมพันธ์",
   religion: "สายวัด",
@@ -19,7 +19,7 @@ export type TaskPreset = {
   name: string;
   desc: string;
   type: TaskType;
-}
+};
 
 export type Task = TaskPreset & {
   locationURL: string;
