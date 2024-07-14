@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import QuestDialog from "@/components/QuestDialog";
 import { Button } from "@/components/ui/button";
 import { chulaEngineerLatLong } from "@/constants/quest";
+import { getRandomLatLong, getStreetViewUrl } from "@/libs/location";
 import { Task, TaskType, TaskTypeMapping } from "@/models/task";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { CSSProperties, FC, useEffect, useRef, useState } from "react";
@@ -53,23 +54,15 @@ export interface QuestBoxPreviewProps {
   name: string;
   type: TaskType;
   lat: number;
-  lng: number
+  lng: number;
 }
 
-const getStreetViewUrl = (lat: number, lng: number): string => {
-  const baseUrl = 'https://maps.googleapis.com/maps/api/streetview';
-  const parameters = new URLSearchParams({
-    size: "640x400",
-    location: `${lat},${lng}`,
-    heading: "100",
-    pitch: "10",
-    key: "AIzaSyAkWBk4IGhPB3YTZh1W6IPO9iNcb-hJXDs",
-  });
-
-  return `${baseUrl}?${parameters.toString()}`;
-}
-
-const QuestBoxPreview: FC<QuestBoxPreviewProps> = ({ name, type, lat, lng }) => {
+const QuestBoxPreview: FC<QuestBoxPreviewProps> = ({
+  name,
+  type,
+  lat,
+  lng,
+}) => {
   return (
     <div className="border border-slate-300 rounded-lg p-2">
       <img
@@ -157,38 +150,6 @@ export const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
   );
 };
 
-// FIXME sometimes the street view map goes black. I'm guessing it's probably due to an invalid lat, lng (e.g. directly inside a building instead of on the street)
-function getRandomLatLong(
-  center: { [key: string]: number },
-  radiusInKm: number
-) {
-  const radiusInMeters = radiusInKm * 1000;
-
-  // Convert radius from meters to degrees
-  const radiusInDegrees = radiusInMeters / 111320; // 1 degree ~ 111.32 km
-
-  // Generate two random numbers
-  const u = Math.random();
-  const v = Math.random();
-
-  // Convert u, v to polar coordinates
-  const w = radiusInDegrees * Math.sqrt(u);
-  const t = 2 * Math.PI * v;
-  const x = w * Math.cos(t);
-  const y = w * Math.sin(t);
-
-  // Adjust the x-coordinate for the shrinking of the east-west distances
-  const new_x = x / Math.cos(center.lat * (Math.PI / 180));
-
-  const newLat = center.lat + y;
-  const newLng = center.lng + new_x;
-
-  return {
-    lat: newLat,
-    lng: newLng,
-  };
-}
-
 const QuestPage = () => {
   const [currentTask, setCurrentTask] = useState(null);
   const [skipCount, setSkipCount] = useState(0);
@@ -249,14 +210,15 @@ const QuestPage = () => {
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            {currentQuestsList.map((quest, id) => <QuestBoxPreview
+            {currentQuestsList.map((quest, id) => (
+              <QuestBoxPreview
                 key={id}
                 name={quest.name}
                 type={quest.type}
                 lat={chulaEngineerLatLong.lat}
                 lng={chulaEngineerLatLong.lng}
               />
-            )}
+            ))}
           </div>
         </div>
         <div className="flex flex-col items-center mx-auto">

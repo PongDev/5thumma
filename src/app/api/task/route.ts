@@ -1,16 +1,15 @@
-import { CreateTaskRequestDTO, UpdateTaskRequestDTO } from "@/dtos/task";
+import { CreateTaskResponseDTO, UpdateTaskRequestDTO } from "@/dtos/task";
 import { createTask, updateTasksStatus } from "@/libs/task";
 import { validateUserToken } from "@/libs/user";
 
 export async function POST(request: Request) {
-  const req: CreateTaskRequestDTO = await request.json();
   const token = request.headers.get("Authorization");
   try {
     if (!token) throw new Error("Unauthorized");
     validateUserToken(token);
 
-    await createTask(token, req);
-    return Response.json("Task created");
+    const res: CreateTaskResponseDTO = await createTask(token);
+    return Response.json(res);
   } catch (error) {
     return Response.json("Unauthorized", { status: 401 });
   }
@@ -28,7 +27,7 @@ export async function PUT(request: Request) {
       req.name,
       req.type,
       req.locationURL,
-      req.status,
+      req.status
     );
     return Response.json("Task updated");
   } catch (error) {

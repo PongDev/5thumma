@@ -15,7 +15,7 @@ export type TaskType =
   | "environment"
   | "thief";
 
-export type TaskStatus = "in progress" | "complete";
+export type TaskStatus = "pending" | "decline" | "in progress" | "complete";
 
 export type TaskPreset = {
   name: string;

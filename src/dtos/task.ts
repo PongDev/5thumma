@@ -1,9 +1,6 @@
-import { TaskPreset, TaskStatus, TaskType } from "@/models/task";
+import { Task, TaskStatus, TaskType } from "@/models/task";
 
-export type CreateTaskRequestDTO = TaskPreset & {
-  locationURL: string;
-  locationImageURL: string;
-};
+export type CreateTaskResponseDTO = Task;
 
 export type UpdateTaskRequestDTO = {
   name: string;
