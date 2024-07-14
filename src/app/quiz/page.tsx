@@ -14,7 +14,7 @@ const Quiz = () => {
   const router = useRouter();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [answers, setAnswers] = useState<boolean[]>([false, false, false]);
-  const [allowedTaskTypes, setAllowedTaskTypes] = useState<TaskType[]>([]);
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
   const { question, image } = quizContent[step - 1];
 
   const calculatePreferences = (answers: boolean[]) => {
@@ -48,14 +48,18 @@ const Quiz = () => {
       return newAnswers;
     });
 
-    // FIXME Bug where the last value isn't updated before submit
-    if (step === 3) {
-      setAllowedTaskTypes(calculatePreferences(answers));
+    if (step === 3) setIsSubmit(true);
+    else setStep((prevStep) => (prevStep + 1) as 1 | 2 | 3);
+  };
+
+  useEffect(() => {
+    if (isSubmit) {
+      const allowedTaskTypes = calculatePreferences(answers);
       console.log(answers, allowedTaskTypes);
       // TODO submit prefs to backend
       router.push("/quest");
-    } else setStep((prevStep) => (prevStep + 1) as 1 | 2 | 3);
-  };
+    }
+  }, [isSubmit]);
 
   return (
     <main className="min-h-screen text-center p-24">
