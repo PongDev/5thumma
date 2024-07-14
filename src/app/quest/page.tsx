@@ -158,6 +158,7 @@ const QuestPage = () => {
           <div className="flex flex-col gap-4">
             {currentQuestsList.map((quest, id) => (
               <div
+                key={id}
                 onClick={() => {
                   setClickedQuest(currentQuest);
                   setIsDialogOpen(true);
