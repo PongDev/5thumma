@@ -1,5 +1,6 @@
 "use client";
 import Navbar from "@/components/Navbar";
+import QuestDialog from "@/components/QuestDialog";
 import { Button } from "@/components/ui/button";
 import { chulaEngineerLatLong } from "@/constants/quest";
 import { Task, TaskType, TaskTypeMapping } from "@/models/task";
@@ -77,7 +78,7 @@ export interface QuestBoxProps {
   mapCenter: { lat: number; lng: number };
 }
 
-const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
+export const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
   const { desc, locationImageURL, name, locationURL, status, type } = task;
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -176,7 +177,9 @@ function getRandomLatLong(
 const QuestPage = () => {
   const [currentTask, setCurrentTask] = useState(null);
   const [skipCount, setSkipCount] = useState(0);
-  const [currentQuestsList, setCurrentQuestsList] = useState<Task[]>([])
+  const [currentQuestsList, setCurrentQuestsList] = useState<Task[]>([]);
+  const [clickedQuest, setClickedQuest] = useState<Task | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [curTaskLatLng, setCurTaskLatLng] = useState<{
     lat: number;
     lng: number;
@@ -195,25 +198,32 @@ const QuestPage = () => {
 
   useEffect(() => {
     const getCurrentQuests = async () => {
-      const headers = new Headers()
-      headers.append("Authorization", localStorage.getItem("user_token")!)
-        const response = await fetch('api/user', {
-          method: "GET",
-          headers: headers
-        })
-        return response
-    }
+      const headers = new Headers();
+      headers.append("Authorization", localStorage.getItem("user_token")!);
+      const response = await fetch("api/user", {
+        method: "GET",
+        headers: headers,
+      });
+      return response;
+    };
 
-    getCurrentQuests().then(async (res:any) => {
-      const response = await res.json()
-      setCurrentQuestsList(response)
-    })
-    
-  },[])
+    getCurrentQuests().then(async (res: any) => {
+      const response = await res.json();
+      setCurrentQuestsList(response);
+    });
+  }, []);
 
   return (
     <>
       <Navbar />
+      {clickedQuest && (
+        <QuestDialog
+          curTaskLatLng={curTaskLatLng}
+          quest={clickedQuest}
+          isOpen={isDialogOpen}
+          setIsOpen={setIsDialogOpen}
+        />
+      )}
       <div id="wrapper" className="flex gap-10 h-screen py-16 px-10">
         <div className="flex flex-col h-screen w-[30%] overflow-y-scroll">
           <div className="flex items-center py-2 gap-2">
@@ -223,11 +233,16 @@ const QuestPage = () => {
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            {currentQuestsList.map((quest, id) => <QuestBoxPreview
-                key={id}
-                name={quest.name}
-                type={quest.type}
-              />)}
+            {currentQuestsList.map((quest, id) => (
+              <Button
+                onClick={() => {
+                  setClickedQuest(quest);
+                  setIsDialogOpen(true);
+                }}
+              >
+                <QuestBoxPreview key={id} name={quest.name} type={quest.type} />
+              </Button>
+            ))}
           </div>
         </div>
         <div className="flex flex-col items-center mx-auto">
