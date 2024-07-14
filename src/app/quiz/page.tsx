@@ -21,15 +21,14 @@ const Quiz = () => {
 
   const calculatePreferences = (answers: boolean[]) => {
     const allowedTaskTypes: TaskType[] = [];
-    // TODO reconfirm if task types are correct
     if (answers[0]) {
       allowedTaskTypes.push("eat");
       if (answers[1]) allowedTaskTypes.push("outstanding");
-      if (answers[2]) allowedTaskTypes.push("environment");
+      if (answers[2]) allowedTaskTypes.push("thief");
     }
     if (answers[1]) {
       allowedTaskTypes.push("relationship");
-      if (answers[2]) allowedTaskTypes.push("thief");
+      if (answers[2]) allowedTaskTypes.push("environment");
     }
     if (answers[2]) {
       allowedTaskTypes.push("religion");
