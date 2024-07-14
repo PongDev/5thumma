@@ -6,21 +6,6 @@ import { Task, TaskType, TaskTypeMapping } from "@/models/task";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { CSSProperties, FC, useEffect, useRef, useState } from "react";
 import { ClipLoader } from "react-spinners";
-export interface QuestBoxPreviewProps {
-  name: string;
-}
-const QuestBoxPreview: FC<QuestBoxPreviewProps> = ({ name }) => {
-  return (
-    <div className="border-b border-slate-300 rounded-md shadow-sm w-[227px]">
-      <img
-        className="rounded-t-md"
-        src="https://as2.ftcdn.net/v2/jpg/02/64/15/41/1000_F_264154131_XvpBI5fARjB7Qlo4PMrMMTaunXha47NR.jpg"
-        alt="quest image"
-      />
-      <p className="pb-8 px-2 pt-2">{name}</p>
-    </div>
-  );
-};
 
 const getTaskTypeStyle = (type: TaskType): CSSProperties => {
   let textColor = "";
@@ -28,8 +13,8 @@ const getTaskTypeStyle = (type: TaskType): CSSProperties => {
 
   switch (type) {
     case "eat":
-      textColor = "#59DE5F"; // Equivalent to Tailwind text-green-500
-      bgColor = "#DCFCE7"; // Equivalent to Tailwind bg-green-100
+      textColor = "#59DE5F"; // Equivalent to Tailwind text-lime-500
+      bgColor = "#DCFCE7"; // Equivalent to Tailwind bg-lime-100
       break;
     case "relationship":
       textColor = "#4299e1"; // Equivalent to Tailwind text-blue-500
@@ -63,6 +48,30 @@ const getTaskTypeStyle = (type: TaskType): CSSProperties => {
   };
 };
 
+export interface QuestBoxPreviewProps {
+  name: string;
+  type: TaskType;
+}
+
+const QuestBoxPreview: FC<QuestBoxPreviewProps> = ({ name, type }) => {
+  return (
+    <div className="border border-slate-300 rounded-lg p-2">
+      <img
+        className="rounded-t-md"
+        src="https://as2.ftcdn.net/v2/jpg/02/64/15/41/1000_F_264154131_XvpBI5fARjB7Qlo4PMrMMTaunXha47NR.jpg"
+        alt="quest image"
+      />
+      <p className="px-2 py-2 text-sm">{name}</p>
+      <p
+        className="break-all flex-grow px-4 py-1 mb-2 rounded-full w-min text-nowrap text-sm"
+        style={getTaskTypeStyle(type)}
+      >
+        {TaskTypeMapping[type]}
+      </p>
+    </div>
+  );
+};
+
 export interface QuestBoxProps {
   task: Task;
   mapCenter: { lat: number; lng: number };
@@ -93,7 +102,7 @@ const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
             heading: 100,
             pitch: 10,
           },
-        },
+        }
       );
 
       map.setStreetView(panorama);
@@ -101,31 +110,31 @@ const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
   }, [isLoaded, mapCenter]);
 
   return (
-    <div className="border-b border-slate-300 rounded-md shadow-md w-[575px] text-wrap">
+    <div className="border border-slate-300 rounded-2xl h-full w-full text-wrap">
       {isLoaded ? (
         <div>
           <div ref={mapRef}></div>
-          <div ref={panoRef} className="rounded-t-md h-[240px] w-full"></div>
+          <div ref={panoRef} className="rounded-t-md h-80 w-full"></div>
         </div>
       ) : (
-        <div className="flex justify-center items-center rounded-t-md h-[240px] w-full">
+        <div className="flex justify-center items-center rounded-t-md h-80 w-full">
           <ClipLoader color="blue" loading={true}></ClipLoader>
         </div>
       )}
 
-      <div className="px-4 pt-4 pb-8 ">
-        <p className="text-3xl mb-4">{name}</p>
-        <div className="grid grid-cols-[100px_1fr] gap-4">
-          <p className="text-nowrap">รายละเอียด : </p>
-          <p className="break-all flex-grow">{desc}</p>
-
-          <p className="text-nowrap">ประเภท : </p>
+      <div className="px-4 pt-4 pb-8 h-full">
+        <p className="text-2xl mb-4">{name}</p>
+        <div className="grid grid-cols-[80px_1fr] items-center gap-4">
+          <p className="text-nowrap text-slate-400 text-sm">ประเภทเควสต์</p>
           <p
-            className="break-all flex-grow px-2 rounded-md w-min text-nowrap"
+            className="break-all flex-grow px-4 py-1 rounded-full w-min text-nowrap"
             style={getTaskTypeStyle(type)}
           >
             {TaskTypeMapping[type]}
           </p>
+
+          <p className="text-nowrap text-slate-400 text-sm">คำชี้แจง</p>
+          <p className="break-all flex-grow text-slate-400">{desc}</p>
         </div>
       </div>
     </div>
@@ -135,7 +144,7 @@ const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
 // FIXME sometimes the street view map goes black. I'm guessing it's probably due to an invalid lat, lng (e.g. directly inside a building instead of on the street)
 function getRandomLatLong(
   center: { [key: string]: number },
-  radiusInKm: number,
+  radiusInKm: number
 ) {
   const radiusInMeters = radiusInKm * 1000;
 
@@ -186,19 +195,21 @@ const QuestPage = () => {
   return (
     <>
       <Navbar />
-      <div id="wrapper" className="flex">
-        <div className="flex flex-col mx-16">
-          <div className="flex py-2 gap-2">
-            <div className="flex justify-center items-cente">
-              Saved Challenges
-            </div>
-            <div className="flex justify-center items-center font-mono rounded-full bg-indigo-500 p-2 text-white w-8 h-8">
+      <div id="wrapper" className="flex gap-10 h-screen py-16 px-10">
+        <div className="flex flex-col h-screen w-[30%] overflow-y-scroll">
+          <div className="flex items-center py-2 gap-2">
+            เควสต์ที่รับแล้ว
+            <div className="flex justify-center items-center font-mono rounded-full bg-indigo-500 p-2 text-white w-6 h-6 text-sm">
               2
             </div>
           </div>
-          <div className="flex flex-col gap-4 shadow-md rounded-lg p-4 border">
+          <div className="flex flex-col gap-4">
             {Array.from({ length: 10 }, (_, id) => (
-              <QuestBoxPreview key={id} name={`quest name ${id}`} />
+              <QuestBoxPreview
+                key={id}
+                name={`เควสต์ ${id}`}
+                type={"religion"}
+              />
             ))}
           </div>
         </div>
@@ -206,29 +217,30 @@ const QuestPage = () => {
           <QuestBox
             mapCenter={curTaskLatLng}
             task={{
-              name: "Quest Name",
-              desc: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-              type: "thief",
+              name: "ชื่อเควสต์สุดมหัศจรรย์พันลึก",
+              desc: "อินดอร์บาลานซ์มาร์จินเมี่ยงคำไนท์ โกะทาวน์เฮาส์ซิงสกายดีพาร์ตเมนท์ กาญจนาภิเษกฮ็อต คณาญาติ ภควัทคีตาป๋าฟลุตออร์แกนิก ฟรุตรอยัลตี้ บูติคฮ่องเต้วิลเลจ",
+              type: "relationship",
               locationImageURL: "",
               locationURL: "",
               status: "",
             }}
           />
 
-          <div className="flex justify-between w-full mt-8">
+          <div className="flex justify-between w-full mt-8 gap-4">
             <Button
-              variant={"default"}
-              className="rounded-lg w-60 bg-green-500 text-green-50 shadow hover:bg-green-500/70 dark:bg-green-50 dark:text-green-500 dark:hover:bg-green-50/70"
+              size="lg"
+              className="w-full bg-lime-500 text-lime-50 shadow hover:bg-lime-500/70 dark:bg-lime-50 dark:text-lime-500 dark:hover:bg-lime-50/70"
               onClick={takeChallengeOnClickHandler}
             >
-              Take this challenge
+              รับคำท้า 💢💢🗣️💢🔥
             </Button>
             <Button
-              variant={"destructive"}
-              className="rounded-lg w-60"
+              variant="outline"
+              size="lg"
+              className="w-full"
               onClick={skipTaskOnClickHandler}
             >
-              Skip
+              ไม่ชอบ เอาใหม่ 😤
             </Button>
           </div>
         </div>
