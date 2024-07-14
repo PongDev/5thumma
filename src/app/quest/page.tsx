@@ -3,7 +3,8 @@ import Navbar from "@/components/Navbar";
 import QuestDialog from "@/components/QuestDialog";
 import { Button } from "@/components/ui/button";
 import { chulaEngineerLatLong } from "@/constants/quest";
-import { getRandomLatLong, getStreetViewUrl } from "@/libs/location";
+import { getRandomLatLong } from "@/libs/location";
+import { UpdateTaskRequestDTO } from "@/dtos/task";
 import { Task, TaskType, TaskTypeMapping } from "@/models/task";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { CSSProperties, FC, useEffect, useRef, useState } from "react";
@@ -56,6 +57,19 @@ export interface QuestBoxPreviewProps {
   lat: number;
   lng: number;
 }
+
+const getStreetViewUrl = (lat: number, lng: number): string => {
+  const baseUrl = "https://maps.googleapis.com/maps/api/streetview";
+  const parameters = new URLSearchParams({
+    size: "640x400",
+    location: `${lat},${lng}`,
+    heading: "100",
+    pitch: "10",
+    key: "AIzaSyAkWBk4IGhPB3YTZh1W6IPO9iNcb-hJXDs",
+  });
+
+  return `${baseUrl}?${parameters.toString()}`;
+};
 
 const QuestBoxPreview: FC<QuestBoxPreviewProps> = ({
   name,
@@ -151,25 +165,41 @@ export const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
 };
 
 const QuestPage = () => {
-  const [currentTask, setCurrentTask] = useState(null);
-  const [skipCount, setSkipCount] = useState(0);
+  const [currentQuest, setCurrentQuest] = useState<Task | null>(null);
+  // const [skipCount, setSkipCount] = useState(0);
   const [currentQuestsList, setCurrentQuestsList] = useState<Task[]>([]);
   const [clickedQuest, setClickedQuest] = useState<Task | null>(null);
+  const [isAccepted, setisAccepted] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [curTaskLatLng, setCurTaskLatLng] = useState<{
     lat: number;
     lng: number;
   }>(getRandomLatLong(chulaEngineerLatLong, 100));
 
-  const takeChallengeOnClickHandler = () => {};
+  const takeChallengeOnClickHandler = async () => {
+    setisAccepted(true);
+
+    const taskData: UpdateTaskRequestDTO = {
+      name: currentQuest!.name,
+      type: currentQuest!.type,
+      locationURL: currentQuest!.locationURL,
+      status: "in progress",
+    };
+
+    const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("user_token")!);
+
+    await fetch("/api/task", {
+      method: "PUT",
+      body: JSON.stringify(taskData),
+      headers: headers,
+    });
+  };
 
   const skipTaskOnClickHandler = () => {
     setCurTaskLatLng(getRandomLatLong(chulaEngineerLatLong, 100));
-    // call new random google image
-    // set new task to state
-    // add to skip count
-    // fetch new task
-    // trigger animation
+    // get new task
+    setisAccepted(false);
   };
 
   useEffect(() => {
@@ -236,10 +266,14 @@ const QuestPage = () => {
           <div className="flex justify-between w-full mt-8 gap-4">
             <Button
               size="lg"
-              className="w-full bg-lime-500 text-lime-50 shadow hover:bg-lime-500/70 dark:bg-lime-50 dark:text-lime-500 dark:hover:bg-lime-50/70"
+              className={
+                isAccepted
+                  ? "w-full bg-lime-50 text-lime-500 hover:bg-lime-100/70 outline"
+                  : "w-full bg-lime-500 text-lime-50 hover:bg-lime-500/70"
+              }
               onClick={takeChallengeOnClickHandler}
             >
-              รับคำท้า 💢💢🗣️💢🔥
+              {isAccepted ? "รับคำท้าแล้ว ✅" : "รับคำท้า 💢💢🗣️💢🔥"}
             </Button>
             <Button
               variant="outline"
@@ -247,7 +281,7 @@ const QuestPage = () => {
               className="w-full"
               onClick={skipTaskOnClickHandler}
             >
-              ไม่ชอบ เอาใหม่ 😤
+              {isAccepted ? "เอามาอีก! 😤" : "ไม่ชอบ เอาใหม่ 😤"}
             </Button>
           </div>
         </div>
