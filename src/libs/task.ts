@@ -24,6 +24,10 @@ export const createTask = async (token: string): Promise<Task> => {
 
   const generatedTask: Task = {
     ...filteredTasksPresets[crypto.randomInt(0, filteredTasksPresets.length)],
+    location: {
+      latitude: generatedLatLong.lat,
+      longitude: generatedLatLong.lng,
+    },
     locationURL: `https://maps.google.com/maps?q=${generatedLatLong.lat},${generatedLatLong.lng}`,
     locationImageURL,
     status: "pending",

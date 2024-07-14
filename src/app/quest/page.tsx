@@ -150,6 +150,10 @@ const QuestPage = () => {
               name: "ชื่อเควสต์สุดมหัศจรรย์พันลึก",
               desc: "อินดอร์บาลานซ์มาร์จินเมี่ยงคำไนท์ โกะทาวน์เฮาส์ซิงสกายดีพาร์ตเมนท์ กาญจนาภิเษกฮ็อต คณาญาติ ภควัทคีตาป๋าฟลุตออร์แกนิก ฟรุตรอยัลตี้ บูติคฮ่องเต้วิลเลจ",
               type: "relationship",
+              location: {
+                latitude: curTaskLatLng.lat,
+                longitude: curTaskLatLng.lng,
+              },
               locationImageURL: "",
               locationURL: "",
             }}

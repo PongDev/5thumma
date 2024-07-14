@@ -23,7 +23,13 @@ export type TaskPreset = {
   type: TaskType;
 };
 
+export type Location = {
+  latitude: number;
+  longitude: number;
+};
+
 export type Task = TaskPreset & {
+  location: Location;
   locationURL: string;
   locationImageURL: string;
   status?: TaskStatus;
