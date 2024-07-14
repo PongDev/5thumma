@@ -27,7 +27,7 @@ export async function PUT(request: Request) {
       req.name,
       req.type,
       req.locationURL,
-      req.status
+      req.status,
     );
     return Response.json("Task updated");
   } catch (error) {

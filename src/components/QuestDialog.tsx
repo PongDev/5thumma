@@ -1,8 +1,8 @@
-import { QuestBox } from "@/app/quest/page";
 import { Button } from "@/components/ui/button";
 import { Task } from "@/models/task";
 import { Dialog } from "@radix-ui/react-dialog";
 import React from "react";
+import QuestBox from "./QuestBox";
 
 export interface QuestDialogProps {
   curTaskLatLng: {

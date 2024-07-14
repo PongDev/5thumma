@@ -1,57 +1,18 @@
 "use client";
 import Navbar from "@/components/Navbar";
+import QuestBox from "@/components/QuestBox";
 import QuestDialog from "@/components/QuestDialog";
 import { Button } from "@/components/ui/button";
 import { chulaEngineerLatLong } from "@/constants/quest";
-import { getRandomLatLong } from "@/libs/location";
 import { UpdateTaskRequestDTO } from "@/dtos/task";
+import { getTaskTypeStyle } from "@/libs/utils";
+import { getRandomLatLong } from "@/libs/location";
 import { Task, TaskType, TaskTypeMapping } from "@/models/task";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { CSSProperties, FC, useEffect, useRef, useState } from "react";
 import { ClipLoader } from "react-spinners";
 
-const getTaskTypeStyle = (type: TaskType): CSSProperties => {
-  let textColor = "";
-  let bgColor = "";
-
-  switch (type) {
-    case "eat":
-      textColor = "#59DE5F"; // Equivalent to Tailwind text-lime-500
-      bgColor = "#DCFCE7"; // Equivalent to Tailwind bg-lime-100
-      break;
-    case "relationship":
-      textColor = "#4299e1"; // Equivalent to Tailwind text-blue-500
-      bgColor = "#dbeafe"; // Equivalent to Tailwind bg-blue-100
-      break;
-    case "religion":
-      textColor = "#ecc94b"; // Equivalent to Tailwind text-yellow-500
-      bgColor = "#fef9c3"; // Equivalent to Tailwind bg-yellow-100
-      break;
-    case "outstanding":
-      textColor = "#e53e3e"; // Equivalent to Tailwind text-red-500
-      bgColor = "#fee2e2"; // Equivalent to Tailwind bg-red-100
-      break;
-    case "environment":
-      textColor = "#319795"; // Equivalent to Tailwind text-teal-500
-      bgColor = "#ccfbf1"; // Equivalent to Tailwind bg-teal-100
-      break;
-    case "thief":
-      textColor = "#a0aec0"; // Equivalent to Tailwind text-gray-500
-      bgColor = "#e5e7eb"; // Equivalent to Tailwind bg-gray-200
-      break;
-    default:
-      textColor = "#000000"; // Equivalent to Tailwind text-black
-      bgColor = "#ffffff"; // Eq  uivalent to Tailwind bg-white
-      break;
-  }
-
-  return {
-    color: textColor,
-    backgroundColor: bgColor,
-  };
-};
-
-export interface QuestBoxPreviewProps {
+interface QuestBoxPreviewProps {
   name: string;
   type: TaskType;
   lat: number;
@@ -91,75 +52,6 @@ const QuestBoxPreview: FC<QuestBoxPreviewProps> = ({
       >
         {TaskTypeMapping[type]}
       </p>
-    </div>
-  );
-};
-
-export interface QuestBoxProps {
-  task: Task;
-  mapCenter: { lat: number; lng: number };
-}
-
-export const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
-  const { desc, locationImageURL, name, locationURL, status, type } = task;
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: "AIzaSyAkWBk4IGhPB3YTZh1W6IPO9iNcb-hJXDs", // Replace with your API key
-  });
-
-  const mapRef = useRef<null | HTMLDivElement>(null);
-  const panoRef = useRef<null | HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (isLoaded && mapRef.current && panoRef.current) {
-      const map = new window.google.maps.Map(mapRef.current, {
-        center: mapCenter,
-        zoom: 14,
-      });
-
-      const panorama = new window.google.maps.StreetViewPanorama(
-        panoRef.current,
-        {
-          position: mapCenter,
-          pov: {
-            heading: 100,
-            pitch: 10,
-          },
-        }
-      );
-
-      map.setStreetView(panorama);
-    }
-  }, [isLoaded, mapCenter]);
-
-  return (
-    <div className="border border-slate-300 rounded-2xl h-full w-full text-wrap">
-      {isLoaded ? (
-        <div>
-          <div ref={mapRef}></div>
-          <div ref={panoRef} className="rounded-t-md h-96 w-full"></div>
-        </div>
-      ) : (
-        <div className="flex justify-center items-center rounded-t-md h-80 w-full">
-          <ClipLoader color="blue" loading={true}></ClipLoader>
-        </div>
-      )}
-
-      <div className="px-4 pt-4 pb-8 h-full">
-        <p className="text-2xl mb-4">{name}</p>
-        <div className="grid grid-cols-[80px_1fr] items-center gap-4">
-          <p className="text-nowrap text-slate-400 text-sm">ประเภทเควสต์</p>
-          <p
-            className="break-all flex-grow px-4 py-1 rounded-full w-min text-nowrap"
-            style={getTaskTypeStyle(type)}
-          >
-            {TaskTypeMapping[type]}
-          </p>
-
-          <p className="text-nowrap text-slate-400 text-sm">คำชี้แจง</p>
-          <p className="break-all flex-grow text-slate-400">{desc}</p>
-        </div>
-      </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 // FIXME sometimes the street view map goes black. I'm guessing it's probably due to an invalid lat, lng (e.g. directly inside a building instead of on the street)
 export function getRandomLatLong(
   center: { [key: string]: number },
-  radiusInKm: number
+  radiusInKm: number,
 ) {
   const radiusInMeters = radiusInKm * 1000;
 

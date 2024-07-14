@@ -13,13 +13,13 @@ export const createTask = async (token: string): Promise<Task> => {
   const userAllowTaskTypes = userData?.allowTaskTypes ?? [];
 
   const filteredTasksPresets = TaskPresets.filter((taskPreset) =>
-    userAllowTaskTypes.includes(taskPreset.type)
+    userAllowTaskTypes.includes(taskPreset.type),
   );
 
   const generatedLatLong = getRandomLatLong(chulaEngineerLatLong, 100);
   const locationImageURL = getStreetViewUrl(
     generatedLatLong.lat,
-    generatedLatLong.lng
+    generatedLatLong.lng,
   );
 
   const generatedTask: Task = {
@@ -50,7 +50,7 @@ export const updateTasksStatus = async (
   taskName: string,
   taskType: TaskType,
   taskLocationURL: string,
-  status: TaskStatus
+  status: TaskStatus,
 ) => {
   validateUserToken(token);
 
