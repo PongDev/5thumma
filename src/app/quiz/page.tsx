@@ -9,6 +9,8 @@ import Image from "next/image";
 
 import { quizContent } from "../../constants/quiz";
 import { TaskType } from "@/models/task";
+import { CreateUserRequestDTO } from "@/dtos/user";
+import Navbar from "@/components/Navbar";
 
 const Quiz = () => {
   const router = useRouter();
@@ -41,7 +43,6 @@ const Quiz = () => {
   };
 
   const handleSelect = (isYes: boolean) => {
-    console.log(step);
     setAnswers((prevAnswers) => {
       const newAnswers = [...prevAnswers];
       newAnswers[step - 1] = isYes;
@@ -53,20 +54,34 @@ const Quiz = () => {
   };
 
   useEffect(() => {
+    const postUserData = async (allowTaskTypes: TaskType[]) => {
+      const userData: CreateUserRequestDTO = {
+        allowTaskTypes,
+      };
+
+      const response = await fetch("/api/user", {
+        method: "POST",
+        body: JSON.stringify(userData),
+      });
+      return response;
+    };
+
     if (isSubmit) {
-      const allowedTaskTypes = calculatePreferences(answers);
-      console.log(answers, allowedTaskTypes);
-      // TODO submit prefs to backend
-      router.push("/quest");
+      const allowTaskTypes = calculatePreferences(answers);
+      console.log(answers, allowTaskTypes);
+
+      postUserData(allowTaskTypes).then(async (res: any) => {
+        const response = await res.json();
+        localStorage.setItem("user_token", response.token);
+        router.push("/quest");
+      });
     }
   }, [isSubmit]);
 
   return (
     <main className="min-h-screen text-center p-24">
-      <Button variant="ghost" className="absolute top-4 left-4">
-        <ChevronLeftIcon />
-        <Link href="/">พ้มไม่เบื่อโลกแล้วว่ะ</Link>
-      </Button>
+      <Navbar />
+
       <h1 className="font-medium text-xl mb-10">
         ไหนดูสิ้ว่าคุณเหมาะกับการหาทำแบบไหน
       </h1>
