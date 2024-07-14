@@ -1,11 +1,6 @@
 import { Task } from "@/models/task";
 import { usersCollection } from "./firestore";
-import {
-  getUserData,
-  InvalidTokenError,
-  UserNotFoundError,
-  validateUserToken,
-} from "./user";
+import { getUserData, validateUserToken } from "./user";
 
 export const createTask = async (token: string, task: Task) => {
   validateUserToken(token);
@@ -19,7 +14,7 @@ export const createTask = async (token: string, task: Task) => {
 export const getTasks = async (token: string): Promise<Task[]> => {
   validateUserToken(token);
 
-  const [userRef, userData] = await getUserData(token);
+  const [_, userData] = await getUserData(token);
   return userData?.tasks ?? [];
 };
 

@@ -60,6 +60,8 @@ export const createUser = async (allowTaskTypes: TaskType[]) => {
   }
   const user: User = {
     allowTaskTypes,
+    createdAt: new Date().getTime(),
+    updatedAt: new Date().getTime(),
   };
   await userRef.set(user);
   return token;
