@@ -1,11 +1,14 @@
-import { Button, buttonVariants } from "./ui/button"
+import { ChevronLeftIcon } from "@radix-ui/react-icons";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
-    <div className="flex p-6">
-      <Button variant={"outline"} className="text-indigo-500">{"< Back To Home"}</Button>
-    </div>
-  )
-}
+    <Button variant="ghost" className="absolute top-4 left-4">
+      <ChevronLeftIcon />
+      <Link href="/">พ้มไม่เบื่อโลกแล้วว่ะ</Link>
+    </Button>
+  );
+};
 
-export default Navbar
+export default Navbar;

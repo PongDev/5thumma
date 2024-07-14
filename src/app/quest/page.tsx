@@ -185,7 +185,7 @@ const QuestPage = () => {
 
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar />
       <div id="wrapper" className="flex">
         <div className="flex flex-col mx-16">
           <div className="flex py-2 gap-2">
