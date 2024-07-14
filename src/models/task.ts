@@ -15,10 +15,13 @@ export type TaskType =
   | "environment"
   | "thief";
 
-export type Task = {
+export type TaskPreset = {
   name: string;
   desc: string;
   type: TaskType;
+}
+
+export type Task = TaskPreset & {
   locationURL: string;
   locationImageURL: string;
   status: string;
