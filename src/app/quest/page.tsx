@@ -1,8 +1,11 @@
+"use client";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
+import { chulaEngineerLatLong } from "@/constants/quest";
 import { Task, TaskType, TaskTypeMapping } from "@/models/task";
-import { Parallax, ParallaxLayer } from "@react-spring/parallax";
-import { CSSProperties, FC } from "react";
+import { useJsApiLoader } from "@react-google-maps/api";
+import { CSSProperties, FC, useEffect, useRef, useState } from "react";
+import { ClipLoader } from "react-spinners";
 export interface QuestBoxPreviewProps {
   name: string;
 }
@@ -62,17 +65,54 @@ const getTaskTypeStyle = (type: TaskType): CSSProperties => {
 
 export interface QuestBoxProps {
   task: Task;
+  mapCenter: { lat: number; lng: number };
 }
 
-const QuestBox: FC<QuestBoxProps> = ({ task }) => {
+const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
   const { desc, locationImageURL, name, locationURL, status, type } = task;
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyAkWBk4IGhPB3YTZh1W6IPO9iNcb-hJXDs", // Replace with your API key
+  });
+
+  const mapRef = useRef<null | HTMLDivElement>(null);
+  const panoRef = useRef<null | HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isLoaded && mapRef.current && panoRef.current) {
+      const map = new window.google.maps.Map(mapRef.current, {
+        center: mapCenter,
+        zoom: 14,
+      });
+
+      const panorama = new window.google.maps.StreetViewPanorama(
+        panoRef.current,
+        {
+          position: mapCenter,
+          pov: {
+            heading: 100,
+            pitch: 10,
+          },
+        }
+      );
+
+      map.setStreetView(panorama);
+    }
+  }, [isLoaded, mapCenter]);
+
   return (
     <div className="border-b border-slate-300 rounded-md shadow-md w-[575px] text-wrap">
-      <img
-        className="rounded-t-md h-[240px] w-full"
-        src="https://as2.ftcdn.net/v2/jpg/02/64/15/41/1000_F_264154131_XvpBI5fARjB7Qlo4PMrMMTaunXha47NR.jpg"
-        alt="quest image"
-      />
+      {isLoaded ? (
+        <div>
+          <div ref={mapRef}></div>
+          <div ref={panoRef} className="rounded-t-md h-[240px] w-full"></div>
+        </div>
+      ) : (
+        <div className="flex justify-center items-center rounded-t-md h-[240px] w-full">
+          <ClipLoader color="blue" loading={true}></ClipLoader>
+        </div>
+      )}
+
       <div className="px-4 pt-4 pb-8 ">
         <p className="text-3xl mb-4">{name}</p>
         <div className="grid grid-cols-[100px_1fr] gap-4">
@@ -92,7 +132,57 @@ const QuestBox: FC<QuestBoxProps> = ({ task }) => {
   );
 };
 
+// FIXME sometimes the street view map goes black. I'm guessing it's probably due to an invalid lat, lng (e.g. directly inside a building instead of on the street)
+function getRandomLatLong(
+  center: { [key: string]: number },
+  radiusInKm: number
+) {
+  const radiusInMeters = radiusInKm * 1000;
+
+  // Convert radius from meters to degrees
+  const radiusInDegrees = radiusInMeters / 111320; // 1 degree ~ 111.32 km
+
+  // Generate two random numbers
+  const u = Math.random();
+  const v = Math.random();
+
+  // Convert u, v to polar coordinates
+  const w = radiusInDegrees * Math.sqrt(u);
+  const t = 2 * Math.PI * v;
+  const x = w * Math.cos(t);
+  const y = w * Math.sin(t);
+
+  // Adjust the x-coordinate for the shrinking of the east-west distances
+  const new_x = x / Math.cos(center.lat * (Math.PI / 180));
+
+  const newLat = center.lat + y;
+  const newLng = center.lng + new_x;
+
+  return {
+    lat: newLat,
+    lng: newLng,
+  };
+}
+
 const QuestPage = () => {
+  const [currentTask, setCurrentTask] = useState(null);
+  const [skipCount, setSkipCount] = useState(0);
+  const [curTaskLatLng, setCurTaskLatLng] = useState<{
+    lat: number;
+    lng: number;
+  }>(getRandomLatLong(chulaEngineerLatLong, 100));
+
+  const takeChallengeOnClickHandler = () => {};
+
+  const skipTaskOnClickHandler = () => {
+    setCurTaskLatLng(getRandomLatLong(chulaEngineerLatLong, 100));
+    // call new random google image
+    // set new task to state
+    // add to skip count
+    // fetch new task
+    // trigger animation
+  };
+
   return (
     <>
       <Navbar></Navbar>
@@ -114,6 +204,7 @@ const QuestPage = () => {
         </div>
         <div className="flex flex-col items-center mx-auto">
           <QuestBox
+            mapCenter={curTaskLatLng}
             task={{
               name: "Quest Name",
               desc: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
@@ -128,10 +219,15 @@ const QuestPage = () => {
             <Button
               variant={"default"}
               className="rounded-lg w-60 bg-green-500 text-green-50 shadow hover:bg-green-500/70 dark:bg-green-50 dark:text-green-500 dark:hover:bg-green-50/70"
+              onClick={takeChallengeOnClickHandler}
             >
               Take this challenge
             </Button>
-            <Button variant={"destructive"} className="rounded-lg w-60">
+            <Button
+              variant={"destructive"}
+              className="rounded-lg w-60"
+              onClick={skipTaskOnClickHandler}
+            >
               Skip
             </Button>
           </div>

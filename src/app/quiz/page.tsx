@@ -53,7 +53,7 @@ const Quiz = () => {
       setAllowedTaskTypes(calculatePreferences(answers));
       console.log(answers, allowedTaskTypes);
       // TODO submit prefs to backend
-      router.push("/maptest");
+      router.push("/quest");
     } else setStep((prevStep) => (prevStep + 1) as 1 | 2 | 3);
   };
 
