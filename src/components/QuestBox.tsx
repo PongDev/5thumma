@@ -1,15 +1,15 @@
 import { getTaskTypeStyle } from "@/libs/utils";
-import { Task, TaskTypeMapping } from "@/models/task";
+import { Location, Task, TaskTypeMapping } from "@/models/task";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { FC, useEffect, useRef } from "react";
 import { ClipLoader } from "react-spinners";
 
-interface QuestBoxProps {
+export interface QuestBoxProps {
   task: Task;
-  mapCenter: { lat: number; lng: number };
+  mapCenter: Location;
 }
 
-const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
+export const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
   const { desc, locationImageURL, name, locationURL, status, type } = task;
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -22,19 +22,19 @@ const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
   useEffect(() => {
     if (isLoaded && mapRef.current && panoRef.current) {
       const map = new window.google.maps.Map(mapRef.current, {
-        center: mapCenter,
+        center: { lat: mapCenter.latitude, lng: mapCenter.longitude },
         zoom: 14,
       });
 
       const panorama = new window.google.maps.StreetViewPanorama(
         panoRef.current,
         {
-          position: mapCenter,
+          position: { lat: mapCenter.latitude, lng: mapCenter.longitude },
           pov: {
             heading: 100,
             pitch: 10,
           },
-        },
+        }
       );
 
       map.setStreetView(panorama);
@@ -42,10 +42,10 @@ const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
   }, [isLoaded, mapCenter]);
 
   return (
-    <div className="border border-slate-300 rounded-2xl h-full w-full text-wrap">
+    <div className="border border-slate-300 rounded-2xl h-full w-full text-wrap bg-white">
       {isLoaded ? (
         <div>
-          <div ref={mapRef}></div>
+          <div ref={mapRef} className="hidden"></div>
           <div ref={panoRef} className="rounded-t-md h-96 w-full"></div>
         </div>
       ) : (
