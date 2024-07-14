@@ -130,7 +130,7 @@ export const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
       {isLoaded ? (
         <div>
           <div ref={mapRef}></div>
-          <div ref={panoRef} className="rounded-t-md h-80 w-full"></div>
+          <div ref={panoRef} className="rounded-t-md h-96 w-full"></div>
         </div>
       ) : (
         <div className="flex justify-center items-center rounded-t-md h-80 w-full">
@@ -224,7 +224,8 @@ const QuestPage = () => {
 
     getCurrentQuests().then(async (res: any) => {
       const response = await res.json();
-      setCurrentQuestsList(response);
+      console.log(response);
+      setCurrentQuestsList(response.tasks);
     });
   }, []);
 
