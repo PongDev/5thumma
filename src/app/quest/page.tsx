@@ -176,6 +176,7 @@ function getRandomLatLong(
 const QuestPage = () => {
   const [currentTask, setCurrentTask] = useState(null);
   const [skipCount, setSkipCount] = useState(0);
+  const [currentQuestsList, setCurrentQuestsList] = useState<Task[]>([])
   const [curTaskLatLng, setCurTaskLatLng] = useState<{
     lat: number;
     lng: number;
@@ -192,6 +193,24 @@ const QuestPage = () => {
     // trigger animation
   };
 
+  useEffect(() => {
+    const getCurrentQuests = async () => {
+      const headers = new Headers()
+      headers.append("Authorization", localStorage.getItem("user_token")!)
+        const response = await fetch('api/user', {
+          method: "GET",
+          headers: headers
+        })
+        return response
+    }
+
+    getCurrentQuests().then(async (res:any) => {
+      const response = await res.json()
+      setCurrentQuestsList(response)
+    })
+    
+  },[])
+
   return (
     <>
       <Navbar />
@@ -200,17 +219,15 @@ const QuestPage = () => {
           <div className="flex items-center py-2 gap-2">
             เควสต์ที่รับแล้ว
             <div className="flex justify-center items-center font-mono rounded-full bg-indigo-500 p-2 text-white w-6 h-6 text-sm">
-              2
+              {currentQuestsList.length}
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            {Array.from({ length: 10 }, (_, id) => (
-              <QuestBoxPreview
+            {currentQuestsList.map((quest, id) => <QuestBoxPreview
                 key={id}
-                name={`เควสต์ ${id}`}
-                type={"religion"}
-              />
-            ))}
+                name={quest.name}
+                type={quest.type}
+              />)}
           </div>
         </div>
         <div className="flex flex-col items-center mx-auto">
