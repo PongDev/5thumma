@@ -13,7 +13,7 @@ export const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
   const { desc, locationImageURL, name, locationURL, status, type } = task;
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyAkWBk4IGhPB3YTZh1W6IPO9iNcb-hJXDs", // Replace with your API key
+    googleMapsApiKey: "AIzaSyBlqWE1aVHvIYBasz4PehYBWNVyVO48wmE", // Replace with your API key
   });
 
   const mapRef = useRef<null | HTMLDivElement>(null);
@@ -34,7 +34,7 @@ export const QuestBox: FC<QuestBoxProps> = ({ task, mapCenter }) => {
             heading: 100,
             pitch: 10,
           },
-        }
+        },
       );
 
       map.setStreetView(panorama);

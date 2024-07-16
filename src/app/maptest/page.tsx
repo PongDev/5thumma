@@ -16,7 +16,7 @@ const mapCenter = {
 const MyStreetViewMap = () => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyAkWBk4IGhPB3YTZh1W6IPO9iNcb-hJXDs", // Replace with your API key
+    googleMapsApiKey: "AIzaSyBlqWE1aVHvIYBasz4PehYBWNVyVO48wmE", // Replace with your API key
   });
 
   const mapRef = useRef<null | HTMLDivElement>(null);

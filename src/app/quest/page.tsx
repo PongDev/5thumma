@@ -27,7 +27,7 @@ const getStreetViewUrl = (lat: number, lng: number): string => {
     location: `${lat},${lng}`,
     heading: "100",
     pitch: "10",
-    key: "AIzaSyAkWBk4IGhPB3YTZh1W6IPO9iNcb-hJXDs",
+    key: "AIzaSyBlqWE1aVHvIYBasz4PehYBWNVyVO48wmE",
   });
 
   return `${baseUrl}?${parameters.toString()}`;

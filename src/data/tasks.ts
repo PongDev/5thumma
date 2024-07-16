@@ -6,10 +6,10 @@ export const TaskTasteLimestone: TaskPreset = {
   type: "eat",
 };
 export const TaskAIFood: TaskPreset = {
-    name: "AI โภชนา",
-    desc: "Generate รูป AI ในโทรศัพท์ของคุณ โดยบอก AI ว่า 'อาหาร'+ชื่อเล่นพ่อของคุณ+ชื่อสีที่คุณใส่ และสั่งอาหารจากรูปที่ Gen มาในร้านที่ใกล้ที่สุด",
-    type: "eat",
-}
+  name: "AI โภชนา",
+  desc: "Generate รูป AI ในโทรศัพท์ของคุณ โดยบอก AI ว่า 'อาหาร'+ชื่อเล่นพ่อของคุณ+ชื่อสีที่คุณใส่ และสั่งอาหารจากรูปที่ Gen มาในร้านที่ใกล้ที่สุด",
+  type: "eat",
+};
 export const TaskPretendTaste: TaskPreset = {
   name: "กินลมชมวิว",
   desc: "อ้าปาก ทำเหมือนกินสิ่งที่ผ่านไปมา และถ่ายรูปลงโซเชียล",
